@@ -10,11 +10,11 @@ const mongoose = require ("mongoose");
 
 // Instancia el framework express
 const app = express();
-// importar el modelo que creamos 
-const Producto = require("./modelos/prodModelo");
+
 
 // importar el modelo que creamos para reto
-const login = require("./modelos/loginModelo");//debe ir dentro de scr
+//const login = require("./modelos/loginModelo");//debe ir dentro de scr
+const login = require("./modelos/registroUModelo");//debe ir dentro de scr
 const RegistroU = require("./modelos/registroUModelo");
 //onst ListadoO = require("./modelos/listadoModelo");
 const ListadoO = require("./modelos/registroOrdenModelo");
@@ -31,13 +31,13 @@ app.post("/login", (req, res) => {
     //const data = req.body
 
     console.log(req);
-    const { usu, pass }= req.body //{ usu: "admin", pass:"1234" }
+    const { usu, pass }= req.body //{ usu: "admin", pass:"123" }
 
    // const passCifrado = crypto.createHash("sha256").update(pass).digest("hex");
 
     login.findOne({usu, pass}, (error, dataUsu) => {
         if (error) {
-           console.log(error);
+          // console.log(error);
             return  res.send({ estado: "Error al logearse", url: "error" })
         } else {
 
@@ -58,7 +58,7 @@ app.post("/registroUsuarios/guardar", (req, res) => {
     const prod = new RegistroU(data);
     prod.save((error) => {  // para salvarlo en la DB
         if (error) {
-            console.log(error);
+           
             return res.send({ msg: "Error al guardar registro", estado: "error" })
         }
         return res.send({ msg: " Registro guardado con éxito", estado: "ok", url:"/Loguearse" })
@@ -76,36 +76,27 @@ app.post("/registroOrden/guardar", (req, res) => {
             console.log(error);
             return res.send({ msg: "Error al guardar registro de la Orden", estado: "error"  })
         }
-        return res.send({ msg: " Orden guardado con éxito", estado: "ok" })
-        //return res.send({ msg: " Orden guardado con éxito", estado: "ok", url:"/ListadoOrdenes" })
-        
+        return res.send({ msg: " Orden guardado con éxito", estado: "ok" , url:"/ListadoOrdenes" })
+     
     })
 })
 
 app.get("/listadoOrdenes/list", (req, res) => {
-   /*ListadoO.find({}, (error, lOrden) => {
+   ListadoO.find({}, (error, lOrden) => {
         if (error) {
           //  console.log(error);
             return res.send({ estado: "error", msg: "Error al listar" })
         } else {
             if (lOrden !== null) {
                 console.log(lOrden);
-                //return res.send({ estado: "ok", msg: "ok", data: lOrden})
-                return res.send({lOrden})
+                return res.send({ estado: "ok", msg: "ok", data: lOrden})
+                
             } else {
                 return res.send({ estado: "error", msg: "Sin ordenes para listar" })
             }
         }
-    })*/
-
-    const listado = ListadoO.find((error, lOrden) =>{
-        console.log(listado);
-        if (listado ){
-            return res.send({lOrden})           
-
-        }
-
     })
+
 })
 
 app.post("/actualizacion/consultar", (req, res) => {
