@@ -14,11 +14,10 @@ const app = express();
 
 // importar el modelo que creamos para reto
 //const login = require("./modelos/loginModelo");//debe ir dentro de scr
-const login = require("./modelos/registroUModelo");//debe ir dentro de scr
-const RegistroU = require("./modelos/registroUModelo");
-//onst ListadoO = require("./modelos/listadoModelo");
-const ListadoO = require("./modelos/registroOrdenModelo");
-const RegistroO = require("./modelos/registroOrdenModelo");
+const login = require("./src/modelos/registroUModelo");//debe ir dentro de scr
+const RegistroU = require("./src/modelos/registroUModelo");
+const ListadoO = require("./src/modelos/registroOrdenModelo");
+const RegistroO = require("./src/modelos/registroOrdenModelo");
 
 //Parsea los datos a json
 app.use(bodyParser.json());
@@ -67,8 +66,7 @@ app.post("/registroUsuarios/guardar", (req, res) => {
 
 app.post("/registroOrden/guardar", (req, res) => {
     const data = req.body
-
-    console.log(data);
+   
     //Instrucciones para guardar en BD
     const orden = new RegistroO(data);
     orden.save((error) => {  // para salvarlo en la DB
@@ -81,10 +79,10 @@ app.post("/registroOrden/guardar", (req, res) => {
     })
 })
 
-app.get("/listadoOrdenes/list", (req, res) => {
+app.post("/listadoOrdenes/list", (req, res) => {
    ListadoO.find({}, (error, lOrden) => {
         if (error) {
-          //  console.log(error);
+           console.log(error);
             return res.send({ estado: "error", msg: "Error al listar" })
         } else {
             if (lOrden !== null) {
@@ -100,26 +98,24 @@ app.get("/listadoOrdenes/list", (req, res) => {
 })
 
 app.post("/actualizacion/consultar", (req, res) => {
-    //const data = req.body
-
-    console.log(req);
-    const { CCD }= req.body //{ usu: "admin", pass:"1234" }
-
-   // const passCifrado = crypto.createHash("sha256").update(pass).digest("hex");
-
-    login.findOne({usu, pass}, (error, dataUsu) => {
+    
+    const {id} = req.body
+    
+    ListadoO.find({_id:id}, (error, Orden) => {
         if (error) {
            console.log(error);
-            return  res.send({ estado: "Error al logearse", url: "error" })
+            return res.send({ estado: "error", msg: "Error al buscar" })
         } else {
-
-            if(dataUsu !== null){
-                console.log(dataUsu);
-                return res.send({estado: "ok", url:"/ListadoOrdenes"})
+            if (Orden !== null) {
+                console.log(Orden);
+                return res.send({ estado: "ok", msg: "ok", data: Orden})
+                
+            } else {
+                return res.send({ estado: "error", msg: "producto no encontrado" })
             }
         }
-        return res.send({msg:"Error al logear", estado: "Error" })
     })
+
 })
 
 //actuliza  orden
@@ -162,35 +158,7 @@ app.post("/actualizacion/update", (req, res) => { //update
 //console.log(RegistroU)
 
 
-app.post("/producto/get", (req, res) => {
-    const { nombre } = req.body
-    if (nombre === prodNom) {
-        return res.send({ precio: prodPrecio, stock: prodStock })
-    }
-    res.send({ msg: "No encontrado :'(", estado: "error" })
-})
 
-app.post("/producto/delete", (req, res) => {
-    const { nombre } = req.body
-    if (nombre === prodNom) {
-        prodNom = "";
-        prodPrecio = "";
-        prodStock = "";
-        return res.send({ msg: "Producto Eliminado!", estado: "ok" })
-    }
-    res.send({ msg: "No encontrado :'(", estado: "error" })
-})
-
-app.post("/producto/update", (req, res) => {
-    const { nombre, precio, stock } = req.body
-    if (nombre === prodNom) {
-        prodNom = nombre;
-        prodPrecio = precio;
-        prodStock = stock;
-        return res.send({ msg: "Producto Editado", estado: "ok" })
-    }
-    res.send({ msg: "No encontrado :'(", estado: "error" })
-})
 
 //mongodb+srv://sandra:<password>@cluster0.inunada.mongodb.net/?retryWrites=true&w=majority
 //para conectarse a la dase de datos mongo 

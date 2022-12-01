@@ -4,60 +4,59 @@ const mongoose = require("mongoose")
 const Schema = mongoose.Schema;
 
 //const prodModel = new Schema(
-const actualizacionModelo = new Schema(
+const registroOrdenModelo = new Schema(
     {
         
         fecha:{
-            type: date,
+            type: "String",
             required: true
         },
         hora:{
-            type: hora,
+            type: "String",
             required: true
         },
         estado:{
-            type: String,
+            type: "String",
             required: true
         },
         largo:{
-            type: String,
+            type: "String",
             required: true
         },
         ancho:{  
-            type: String,
+            type: "String",
             required: true
         },
         alto:{
-            type: String,
+            type: "String",
             required: true
         },
         peso:{
-            type: String,
+            type: "String",
             required: true
         },
         dirR:{
-            type: String,
+            type: "String",
             required: true
         },
         ciuR:{
-            type: String,
+            type: "String",
             required: true
         },
         nomD:{
-            type: String,
-            unique: true,
+            type: "String",
             required: true
         },
         ccD:{
-            type: String,
+            type: "String",
             required: true
         },
         dirD:{
-            type: String,
+            type: "String",
             required: true
         },
         ciuD:{
-            type: String,
+            type: "String",
             required: true
         }
       
@@ -67,4 +66,4 @@ const actualizacionModelo = new Schema(
 //model.exports = para utilizarlo en otras partes de mi aplicacion 
 //model("nombre del modelo", nombre  esquema)= modelo para interactuar con la BD
 
-module.exports = mongoose.model("actualizacionOrdenes",actualizacionModelo)
+module.exports = mongoose.model("registroOrden",registroOrdenModelo)
