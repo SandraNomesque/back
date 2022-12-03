@@ -147,7 +147,7 @@ app.post("/actualizacion/update", (req, res) => { //update
                     if (!error) {
                         //Si modifico un documento
                         if (result.modifiedCount > 0)
-                            return res.send({ estado: "ok", msg: "Producto actualizado :)" });
+                            return res.send({ estado: "ok", msg: "Producto actualizado :)", url:"/ListadoOrdenes" });
                         return res.send({ estado: "error", msg: "Producto NO modificado :(" });
                     }
                     return res.send({ estado: "error", msg: "Error al actualizar :<" });
