@@ -100,7 +100,7 @@ app.post("/listadoOrdenes/list", (req, res) => {
 app.post("/actualizacion/consultar", (req, res) => {
     
     const {id} = req.body
-    
+    console.log(id);
     ListadoO.find({_id:id}, (error, Orden) => {
         if (error) {
            console.log(error);
